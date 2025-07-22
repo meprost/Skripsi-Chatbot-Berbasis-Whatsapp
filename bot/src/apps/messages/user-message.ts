@@ -20,7 +20,7 @@ const userMessageHandler = async (message: Message) => {
       return;
     }
 
-    message.reply('oi');
+    message.reply('Silahkan ketik */menu* untuk melihat perintah yang ada di bot!!!');
   } catch (err) {
     if (err instanceof AxiosError) {
       logger.error(

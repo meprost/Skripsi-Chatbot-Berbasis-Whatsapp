@@ -21,7 +21,7 @@ const adminMessageHandler = async (message: Message) => {
       return;
     }
 
-    await sendMessageToAdmin('woi mint');
+    await sendMessageToAdmin('Silahkan ketik */menu* untuk melihat perintah untuk admin!!!');
   } catch (err) {
     logger.error(err, '[Admin Message Handler]: Unknown Error');
   }
