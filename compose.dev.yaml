@@ -1,0 +1,66 @@
+services:
+  db:
+    image: postgres:17-alpine
+    restart: always
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      TZ: Asia/Jakarta
+      POSTGRES_USER: atmintjoki
+      POSTGRES_PASSWORD: jokidulubang
+      POSTGRES_DB: tokojoki
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U atmintjoki -d tokojoki"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+      target: dev
+    volumes:
+      - type: bind
+        source: ./backend
+        target: /usr/app
+      - type: volume
+        target: /usr/app/node_modules
+    ports:
+      - 9999:9999
+      - 4983:4983
+    network_mode: host
+    init: true
+    restart: on-failure
+    env_file:
+      - ./backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+
+  bot:
+    build:
+      context: ./bot
+      dockerfile: ./Dockerfile
+      target: dev
+    volumes:
+      - type: bind
+        source: ./bot
+        target: /app
+      - type: volume
+        target: /app/node_modules
+    network_mode: host
+    init: true
+    restart: on-failure
+    env_file:
+      - ./bot/.env
+    depends_on:
+      api:
+        condition: service_started
+
+volumes:
+  pg_data:
