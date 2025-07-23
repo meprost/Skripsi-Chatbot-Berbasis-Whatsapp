@@ -107,7 +107,8 @@ const buyCommandHandler: CommandHandler = async (chat, args) => {
     )}\n` +
     `*・Total Harga :* ${moneyFormatToIDR(
       product.type === 'Joki Perbintang'
-        ? product.price * qty +
+        ? (product.discountPrice > 0 ? product.discountPrice : product.price) *
+            qty +
             parseFloat(
               (
                 (product.discountPrice > 0

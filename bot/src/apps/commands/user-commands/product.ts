@@ -16,6 +16,7 @@ const productCommandHandler: CommandHandler = async (chat) => {
 
   const jokiBundle: Product[] = [];
   const jokiPerbintang: Product[] = [];
+  const jokiClassic: Product[] = [];
 
   products.map((product) => {
     switch (product.type) {
@@ -26,6 +27,7 @@ const productCommandHandler: CommandHandler = async (chat) => {
         jokiPerbintang.push(product);
         break;
       case 'Joki Classic':
+        jokiClassic.push(product);
         break;
       case 'Joki MCL':
         break;
@@ -68,8 +70,25 @@ const productCommandHandler: CommandHandler = async (chat) => {
   });
   messages.push(`╚━━━━━━━━━━━━━━━\n`);
 
+  messages.push(`➥ 🛍️ _*JOKI CLASSIC*_\n`);
+  messages.push(`╔━━━━━━━━━━━━━━━\n`);
+  jokiClassic.map((product, i) => {
+    messages.push(
+      `┃╭─〔 ${product.logo} *${product.name}* 〕\n`,
+      `┃┊ 🏷️ *Harga:* ${priceString(product)}\n`,
+      `╠┊ 🔐 *Kode:* *${product.code}*\n`,
+      `┃┊ ✍️ *Ketik:* /buy ${product.code}\n`,
+      `┃╰───────────────\n`,
+    );
+
+    if (jokiPerbintang.length - 1 !== i) {
+      messages.push(`┃\n`);
+    }
+  });
+  messages.push(`╚━━━━━━━━━━━━━━━\n`);
+
   messages.push(
-    '*Silahkan ketik `/buy kodeProduk` untuk melakukan pemesanan*\n*Contoh:* `/buy BGMTOE`',
+    '\n*Silahkan ketik `/buy kodeProduk` untuk melakukan pemesanan*\n*Contoh:* `/buy BGMTOE, dan /buy MASTER jumlahBintang jika Joki Perbintang`',
   );
 
   await chat.sendMessage(messages.join(''));
