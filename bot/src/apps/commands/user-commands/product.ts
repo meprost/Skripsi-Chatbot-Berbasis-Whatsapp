@@ -68,7 +68,9 @@ const productCommandHandler: CommandHandler = async (chat) => {
   });
   messages.push(`╚━━━━━━━━━━━━━━━\n`);
 
-  messages.push('*Silahkan ketik `/buy kodeProduk` untuk melakukan pemesanan*\n*Contoh:* `/buy BGMTOE`')
+  messages.push(
+    '*Silahkan ketik `/buy kodeProduk` untuk melakukan pemesanan*\n*Contoh:* `/buy BGMTOE`',
+  );
 
   await chat.sendMessage(messages.join(''));
 };
