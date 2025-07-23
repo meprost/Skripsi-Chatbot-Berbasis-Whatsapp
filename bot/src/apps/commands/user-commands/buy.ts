@@ -9,6 +9,7 @@ import { checkPayment, createPayment } from '@/apps/payments/atlantic-pedia';
 import { getProducts } from '@/apps/products';
 import logger from '@/lib/logger';
 import { getCurrentTimeAndDate, moneyFormatToIDR } from '@/lib/utils';
+import { sendMessage } from '@/apps/messages/utils';
 
 const qtyArgsSchema = z.coerce.number();
 
@@ -62,11 +63,13 @@ const buyCommandHandler: CommandHandler = async (chat, args) => {
   const createdPayment = await createPayment({
     nominal:
       product.type === 'Joki Perbintang'
-        ? product.price * qty +
-          parseFloat((product.price * qty * 0.02).toFixed(0))
+        ? (product.discountPrice > 0 ? product.discountPrice : product.price) * qty +
+          parseFloat(((product.discountPrice > 0 ? product.discountPrice : product.price) * qty * 0.02).toFixed(0))
         : createdOrder.totalPrice,
     reffId: createdOrder.orderReference,
   });
+
+  // await chat.sendMessage(createPayment.toString())
 
   const qris = await MessageMedia.fromUrl(createdPayment.data.qrImage, {
     unsafeMime: true,
